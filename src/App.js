@@ -12,6 +12,7 @@ class App extends Component{
       contactID: 0,
       creatingContact: false,
       viewingContact: false,
+      viewingFavorites: false,
       contactBeingViewed: [],
     };
     this.addContact = this.addContact.bind(this);
@@ -20,6 +21,8 @@ class App extends Component{
     this.closeContact = this.closeContact.bind(this);
     this.editContact = this.editContact.bind(this);
     this.deleteContact = this.deleteContact.bind(this);
+    this.addToFavorites = this.addToFavorites.bind(this);
+    this.viewFavorites = this.viewFavorites.bind(this);
   }
 
   addContact(){
@@ -80,23 +83,57 @@ class App extends Component{
     })
   }
 
+  addToFavorites(ID){
+    this.state.contacts.forEach(contact =>{
+      if(contact.ID === ID){
+        contact.favorited = !contact.favorited
+        this.setState({
+          contacts: this.state.contacts,
+        })
+      }
+    })
+  }
+
+  viewFavorites(){
+    this.setState({
+      viewingFavorites: !this.state.viewingFavorites,
+    })
+  }
+
   renderContacts(){
     return this.state.contacts.map(contact => {
-      return(
-        <button className="contact mb-2" onClick = {() => this.viewContact(contact)} key={contact.ID}>
-          <h3>{contact.name}</h3>
-        </button>
-      )
+      if(this.state.viewingFavorites){
+        if(contact.favorited){
+          return(
+            <button className="contact mb-2" onClick = {() => this.viewContact(contact)} key={contact.ID}>
+              <h3>{contact.name}</h3>
+            </button>
+          )
+        }
+      }else{
+        return(
+          <button className="contact mb-2" onClick = {() => this.viewContact(contact)} key={contact.ID}>
+            <h3>{contact.name}</h3>
+          </button>
+        )
+      }
     })
   }
 
   render(){
+    let button
+    if(!this.state.viewingFavorites){
+      button = <button className="btn btn-warning" onClick={() => this.viewFavorites()}>Favorites</button>
+    }else{
+      button = <button className="btn btn-success" onClick={() => this.viewFavorites()}>All Contacts</button>
+    }
       return (
           <div className='App pt-5'>  
               <h1 className="d-flex justify-content-center">Contacts</h1>
 
               <div className="my-5 d-flex justify-content-center">
                 <button className="btn btn-primary mr-3" onClick = {() => this.addContact()}>Add Contact!</button>
+                {button}
               </div>
 
               <div className="container">
@@ -123,6 +160,7 @@ class App extends Component{
                     closePopup = {this.closeContact}
                     editContact = {this.editContact}
                     deleteContact = {this.deleteContact}
+                    favorite = {this.addToFavorites}
                     contact = {this.state.contactBeingViewed}
                 />  
                 : null  

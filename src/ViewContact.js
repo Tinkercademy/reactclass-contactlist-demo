@@ -49,6 +49,14 @@ class ViewContact extends Component{
 
     render(){
         let view
+        let star
+        let addOrRemove
+        if(this.props.contact.favorited){
+            star = <i className="fas fa-star"></i>
+            addOrRemove = "Remove from"
+        }else{
+            addOrRemove = "Add to"
+        }
         if(this.state.editing){
             view = 
             <div className="mt-3">
@@ -65,7 +73,7 @@ class ViewContact extends Component{
         }else{
             view =
             <div className="mt-3">
-                <h3><u>Contact Name</u></h3>
+                <h3><u>Contact Name</u> <span className="star">{star}</span> </h3>
                 <h6>{this.state.name}</h6>
                 <h3><u>Contact Number</u></h3>
                 <h6>{this.state.number}</h6>
@@ -73,6 +81,7 @@ class ViewContact extends Component{
                 <h6>{this.state.email}</h6>
                 <button className="btn btn-success mt-3" onClick={() => this.editContact()}>Edit</button>
                 <button className="btn btn-danger mt-3 ml-3" onClick={() => this.props.deleteContact(this.props.contact.ID)}>Delete</button>
+                <button className="btn btn-warning mt-3 ml-3" onClick={() => this.props.favorite(this.props.contact.ID)}>{addOrRemove} Favorites</button>
             </div>
         }
         return (
