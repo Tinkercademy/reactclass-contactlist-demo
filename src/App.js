@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import CreateContact from './CreateContact';
+import ViewContact from './ViewContact';
 
 class App extends Component{
   constructor() {
@@ -16,6 +17,9 @@ class App extends Component{
     this.addContact = this.addContact.bind(this);
     this.createContact = this.createContact.bind(this);
     this.viewContact = this.viewContact.bind(this);
+    this.closeContact = this.closeContact.bind(this);
+    this.editContact = this.editContact.bind(this);
+    this.deleteContact = this.deleteContact.bind(this);
   }
 
   addContact(){
@@ -41,6 +45,38 @@ class App extends Component{
     this.setState({
       viewingContact: !this.state.viewingContact,
       contactBeingViewed: contact,
+    })
+  }
+
+  closeContact(){
+    this.setState({
+      viewingContact: !this.state.viewingContact,
+    })
+  }
+
+  editContact(ID, name, number, email){
+    this.state.contacts.forEach(contact =>{
+      if(contact.ID === ID){
+        contact.name = name
+        contact.number = number
+        contact.email = email
+        this.setState({
+          contacts: this.state.contacts,
+        })
+      }
+    })
+  }
+
+  deleteContact(ID){
+    let updatedContacts = []
+    this.state.contacts.forEach(contact =>{
+      if(contact.ID !== ID){
+        updatedContacts = [...updatedContacts, contact]
+      }
+    })
+    this.setState({
+      contacts: updatedContacts,
+      viewingContact: !this.state.viewingContact
     })
   }
 
@@ -78,6 +114,16 @@ class App extends Component{
                     closePopup = {this.addContact}
                     createContact = {this.createContact}
                     ID = {this.state.contactID}
+                />  
+                : null  
+              }
+
+              {this.state.viewingContact ?  
+                <ViewContact
+                    closePopup = {this.closeContact}
+                    editContact = {this.editContact}
+                    deleteContact = {this.deleteContact}
+                    contact = {this.state.contactBeingViewed}
                 />  
                 : null  
               }
