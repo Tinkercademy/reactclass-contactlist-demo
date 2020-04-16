@@ -71,3 +71,15 @@
   border-color: transparent;
   cursor: pointer;
 }
+
+.contact {
+  min-height: 60px;
+  margin-left: 75px;
+  width: 200px;
+  border: none;
+  background-color: white;
+  color: black;
+  overflow-wrap: break-word;
+  border-radius: 20px;
+  font-size: 20px;
+}

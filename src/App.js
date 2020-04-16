@@ -10,9 +10,12 @@ class App extends Component{
       contacts: [],
       contactID: 0,
       creatingContact: false,
+      viewingContact: false,
+      contactBeingViewed: [],
     };
     this.addContact = this.addContact.bind(this);
     this.createContact = this.createContact.bind(this);
+    this.viewContact = this.viewContact.bind(this);
   }
 
   addContact(){
@@ -34,6 +37,23 @@ class App extends Component{
     })
   }
 
+  viewContact(contact){
+    this.setState({
+      viewingContact: !this.state.viewingContact,
+      contactBeingViewed: contact,
+    })
+  }
+
+  renderContacts(){
+    return this.state.contacts.map(contact => {
+      return(
+        <button className="contact mb-2" onClick = {() => this.viewContact(contact)} key={contact.ID}>
+          <h3>{contact.name}</h3>
+        </button>
+      )
+    })
+  }
+
   render(){
       return (
           <div className='App pt-5'>  
@@ -41,6 +61,16 @@ class App extends Component{
 
               <div className="my-5 d-flex justify-content-center">
                 <button className="btn btn-primary mr-3" onClick = {() => this.addContact()}>Add Contact!</button>
+              </div>
+
+              <div className="container">
+                <div className="row">
+                  <div className="col-4"></div>
+                  <div className="col-4">
+                    {this.renderContacts() }              
+                  </div>
+                  <div className="col-4"></div>
+                </div>
               </div>
 
               {this.state.creatingContact ?  
